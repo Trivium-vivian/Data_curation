@@ -2,11 +2,11 @@
 
 **Requirements**
 
-- Python 3.6+
+- Python **3.6+**
 - `numpy`, `pandas`, `matplotlib`, `astropy`, `pickle`
   
 **Expected data layout**
-~~~
+```
 project/
 ├── Fitts/                 # root of FITS data
 │   ├── <label_A>/        # e.g., sourceType "PN"
@@ -14,7 +14,7 @@ project/
 │   └── <label_B>/
 ├── CN2                    # CSV with at least: sourceType, sourceName
 └── (code files + notebooks)
-~~~
+```
 You’ll also need to include:
 ~~~
 Ext    = ['_MIPS24_maic.fits', '_CORNISH_5GHz.fits', '_MIPS70_filt.fits']
@@ -140,20 +140,56 @@ Create a **table of samples** as a Pandas DataFrame (or write it to a pickle) wi
 
 `categories: list[str] or None` – None ⇒ `["names","recta"].` Provide `["names","recta","Edge_Survey"]` if you want to include edge rows.
 
-`return_type: "dataframe" | "pickle" (default "dataframe").
+`return_type: "dataframe" | "pickle"` (default `"dataframe"`).
 
-out_path: str or None – required if return_type="pickle".
+`out_path: str or None` – required if `return_type="pickle"`.
 
-include_path: bool – add a path column.
+`include_path: bool` – add a `path` column.
 
-include_category: bool – add a category column.
+`include_category: bool` – add a `category` column.
 
-memmap: bool – passed to FITS loader.
+`memmap: bool` – passed to FITS loader.
 
-fill_nans: bool – present in signature but not applied in this file (images are loaded as-is).
+`fill_nans: bool` – **present in signature but not applied** in this file (images are loaded as-is).
 
 Returns
 
-DataFrame if return_type="dataframe", otherwise writes a pickle and returns out_path.
+DataFrame if `return_type="dataframe"`, otherwise writes a pickle and returns `out_path`.
 
 Example (DataFrame)
+```
+from make_dataframe import build_data_table
+df_clean = build_data_table(
+    base_path=SorceF, results=results,
+    ext_used=Ext[1], ext_list=Ext, survey_list=Survey,  # Channel = Survey[1]
+    include_path=True, include_category=True            # optional extras
+)  # defaults to names+recta
+```
+```
+build_data_table(
+    base_path=SorceF, results=results,
+    ext_used=Ext[1], ext_list=Ext, survey_list=Survey,
+    include_path=True, include_category=True,
+    return_type="pickle", out_path="artifacts/CORNISH_clean.pkl"
+)
+```
+Typical flow
+```
+from sort_data import sort_fits_files
+from load_fits_data import load_fits_from_results
+from make_dataframe import build_data_table
+
+# 1) Index the dataset
+results = sort_fits_files(df, SorceF, Ext[1], na, nan_threshold=0.10)  # builds categories dict
+# -> results["names"], results["recta"], results["Edge_Survey"], etc.  :contentReference[oaicite:11]{index=11}
+
+# 2) Build a clean DataFrame (Edge_Survey excluded by default)
+df_clean = build_data_table(SorceF, results, Ext[1], Ext, Survey)      # DataFrame of rows
+# columns: Channel, name, label, image [, path, category]              :contentReference[oaicite:12]{index=12}
+
+# 3) Load any single cutout on demand
+img = load_fits_from_results(SorceF, results, "Edge_Survey", index=2)  # raw FITS data
+# supports return_header / return_path if needed                      :contentReference[oaicite:13]{index=13}
+
+```
+---
