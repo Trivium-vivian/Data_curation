@@ -193,3 +193,5 @@ img = load_fits_from_results(SorceF, results, "Edge_Survey", index=2)  # raw FIT
 
 ```
 ---
+This project is licensed under the [CC BY-NC-SA 4.0 license](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+
