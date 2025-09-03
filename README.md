@@ -124,7 +124,7 @@ img, hdr, p = load_fits_from_results(SorceF, results, "names", 0,
 `make_dataframe.build_data_table(base_path, results, ext_used, ext_list, survey_list, categories=None, return_type="dataframe", out_path=None, include_path=False, include_category=False, memmap=True, fill_nans=True)`
 
 Create a **table of samples** as a Pandas DataFrame (or write it to a pickle) with columns:
-`Channel`, `name`, `label`, `image` (and optionally `path`, `category`). By default it uses the **clean** categories `["names","recta"]`. The `Channel` string is derived from `ext_used` via its index in `ext_list`→`survey_list`.
+`Channel`, `name`, `label`, `image` (and optionally `path`, `category`). By default it uses the  categories `["names","recta"]`. The `Channel` string is derived from `ext_used` via its index in `ext_list`→`survey_list`.
 
 **Parameters**
 
