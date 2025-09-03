@@ -193,5 +193,17 @@ img = load_fits_from_results(SorceF, results, "Edge_Survey", index=2)  # raw FIT
 
 ```
 ---
+
+**Notes & constraints**
+
+No preprocessing in these modules: images are returned as-is (dtype/shape untouched).
+
+`build_data_table` excludes **edge** rows unless you explicitly include `"Edge_Survey"` in categories. Default is `["names","recta"]`.
+
+The NaN-based **edge** detection is controlled by `nan_threshold` in `sort_fits_files`.
+
+FITS reading uses `memmap=True` by default for efficiency.
+
+---
 This project is licensed under the [CC BY-NC-SA 4.0 license](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
